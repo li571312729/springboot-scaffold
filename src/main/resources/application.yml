@@ -1,0 +1,12 @@
+# 项目相关配置
+baili:
+  #名称
+  name: baili
+  #版本
+  version: 1.0
+  #版权年份
+  copyrightYear: 2020
+spring :
+  # 环境 dev|prod
+  profiles :
+    active : dev

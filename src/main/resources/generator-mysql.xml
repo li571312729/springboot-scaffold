@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!-- 配置生成器 -->
+<generatorConfiguration>
+    <context id="MysqlTables" targetRuntime="MyBatis3">
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+
+        <!-- 增加Models ToStirng方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!-- 增加Models Serializable实现 -->
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <!-- 分页插件 -->
+        <!-- 在example类中增 page 属性，并在mapper.xml的查询中加入page !=null 时的查询 -->
+        <!-- <plugin type="org.mybatis.generator.plugins.MySQLPagerPlugin" /> -->
+        <!-- 在example类中增 offset和limit属性，并在mapper.xml的查询中加入limit ${offset} , ${limit} 提供在offset和limit>0时的查询 -->
+        <!-- <plugin type="org.mybatis.generator.plugins.MySQLPaginationPlugin"></plugin> -->
+
+        <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- mysql数据库连接配置 -->
+        <!--
+            JAVA数据类型和MYSQL的数据类型转换，要注意TINYINT类型，且存储长度为1的情况。
+            TINYINT(1)只用来代表Boolean含义的字段，且0代表false，1代表true。
+            想给1，给true即可会转换为1，但想给2怎么办？
+            如果想要存储多个数值，则定义为TINYINT(N)，N>1。例如TINYINT(2)
+            解决办法一：修改字段 ALTER TABLE 表名 MODIFY LEVEL TINYINT(2) COMMENT '等级';(需要多次修改)
+            解决办法二：在连接mysql的url后添加tinyInt1isBit=false,该属性默认为true(修改一次即可)
+         -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.1.15:3306/bailiai?useSSL=false&amp;serverTimezone=UTC"
+                        userId="root" password="baili123">
+        </jdbcConnection>
+
+        <!--
+            是否忽略BigDecimals 非必填项
+                自动生成Java对象的时候，会根据number类型的长度不同生成不同的数据类型
+                    number长度   Java类型
+                    1~4          Short
+                    5~9          Integer
+                    10~18     Long
+                    18+          BigDecimal
+         -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 以下内容，需要改动 -->
+        <!-- java类生成的位置  -->
+        <javaModelGenerator targetPackage="com.test.entity" targetProject="src/main/java">
+            <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
+            <property name="enableSubPackages" value="true"/>
+            <!-- 从数据库返回的值去除前后空格 -->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- *Mapper.xml配置文件生成的位置 -->
+        <sqlMapGenerator targetPackage="com.test.dao.mapper" targetProject="src/main/java">
+            <!-- 是否让schema作为包后缀 -->
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- java mapper接口生成的位置(interface) -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.test.dao" targetProject="src/main/java">
+            <!-- 是否让schema作为包后缀 -->
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!--
+            指定数据库表
+                tableName数据库表名
+                domainObjectName生成的实体类名
+                是否需要mapper配置文件加入sql的where条件查询,
+                需要将enableCountByExample等设为true,
+                会生成一个对应domainObjectName的Example类
+         -->
+        <table tableName="tb_camera_information" domainObjectName="TbCameraInformation"
+               enableCountByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" enableUpdateByExample="false">
+            <!-- 用于insert时，返回主键的编号 -->
+            <generatedKey column="camera_id" sqlStatement="MySql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

@@ -1,0 +1,163 @@
+#端口
+server:
+  port: 8079
+  undertow:
+    io-threads: 16
+    worker-threads: 256
+    buffer-size: 1024
+    direct-buffers: true
+  ssl:
+    enabled: true
+    key-store-password:
+    # resources 目录下
+    key-store: classpath:baili.com.pfx
+    key-store-type:
+      # Kafka
+      #  kafka:
+      #    bootstrapServers: 192.168.1.93:9092
+      #    consumer:
+      #      groupId: test-consumer-group
+      #application:
+      #rabbitmq:
+      #  host: localhost
+      #  port: 5672
+      #  username: guest
+      # password: guest
+      #  virtualHost: /
+      #  template:
+      #失败重试
+      #   retry:
+      #开启失败重试
+      #      enabled: true
+      #第一次重试的间隔时长
+      #      initial-interval: 10000ms
+      #     max-interval: 300000ms
+      #     multiplier: 2
+      #缺省的交换机名称
+      #   exchange: topic.exchange
+    #生产者确认机制，确保消息会正确发送，如果发送失败会有错误回执，从而触发重试
+  #  publisher-confirms: true
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://************?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    type: com.alibaba.druid.pool.DruidDataSource
+    initial-size: 5
+    max-active: 20
+    min-idle: 1
+    max-wait: 60000
+    username: root
+    password: root
+    filters: stat
+  jackson:
+    default-property-inclusion: non_null
+  mvc:
+    throw-exception-if-no-handler-found: true #出现错误直接抛出异常
+  resources:
+    # 指定静态资源的路径
+    static-locations: classpath:/static/
+  mail:
+    host: smtphz.qiye.163.com
+    username: lixiaoqiang@bailijituan.com
+    password: 3hdUtfvbDEbVVTFQ
+    from: lixiaoqiang@bailijituan.com
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+  redis:
+    cluster:
+      nodes: 192.168.1.76:6379,192.168.1.76:6380,192.168.1.76:6381
+    jedis:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 8
+        # 连接池中的最大空闲连接
+        max-idle: 500
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 2000
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: 10000
+    # 连接超时时间（毫秒）
+    timeout: 0
+    database: 0
+    password:
+    jackson:
+      time-zone: GMT+8
+  # 文件上传和请求头大小
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 150MB
+  messages:
+    basename: i18n.messages
+
+# spring-boot默认打印输出info级别以上的，可在此处修改输出级别
+logging:
+  level:
+    com.baili: info
+    com.baili.*.dao: debug
+
+#MyBatis
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.baili.*.entity
+  global-config:
+    banner: false
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#fastdfs配置
+fdfs:
+  soTimeout: 1500
+  connectTimeout: 600
+  trackerList: 192.168.1.110:23122,192.168.1.110:23123
+  storage: 192.168.1.110:8888
+  pool:
+    max-total: 200
+    max-total-per-key: 50
+    max-wait-millis: 5000
+
+file:
+  imageLocaltion: /home/static/img
+  appLocation: /home/img/app/
+  imgSqlLocation: ${localaddress}:${server.port}/
+  pdfLocaltion: /home/static/pdf/
+
+upload:
+  img: jpg,JPG,jpeg,png,PNG,bmp,BMP,txt.pdf
+
+#阿里验证码
+sms:
+  regionId:
+  accessKey:
+  accessKeySecret:
+  signName:
+  templateCode:
+
+custom:
+  server:
+    http:
+      port: 8078
+# ZooKeeper
+zoo:
+  keeper:
+    #开启标志
+    enabled: false
+    #服务器地址
+    server: 192.168.1.93:2181
+    #命名空间，被称为ZNode
+    namespace: bailizoo
+    #权限控制，加密
+    digest: admin:baili123456
+    #会话超时时间
+    sessionTimeoutMs: 3000
+    #连接超时时间
+    connectionTimeoutMs: 60000
+    #最大重试次数
+    maxRetries: 100
+    #初始休眠时间
+    baseSleepTimeMs: 1000
